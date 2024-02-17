@@ -2,9 +2,13 @@ import { Client, Events, GatewayIntentBits } from "discord.js";
 import logger from "./logger";
 import "dotenv/config";
 import commands from "./commands";
+import { generateDependencyReport, getVoiceConnection } from "@discordjs/voice";
 
-const client = new Client({
-    intents: [GatewayIntentBits.Guilds]
+export const client = new Client({
+    intents: [
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildVoiceStates
+    ]
 });
 
 client.once(Events.ClientReady, (client) => {
@@ -40,3 +44,9 @@ client.on(Events.InteractionCreate, async (interaction) => {
         }
     }
 });
+
+// logger.info(generateDependencyReport());
+
+// process.on("exit", () => {
+//     logger.info("Shutting down Groovebox... Bye!");
+// });

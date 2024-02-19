@@ -1,10 +1,10 @@
 import { CommandInteraction, SlashCommandBuilder } from "discord.js";
 import { search } from "../youtube-data-api/youtube";
 import { VoiceConnectionStatus, getVoiceConnection, joinVoiceChannel } from "@discordjs/voice";
-import { getVoiceChannelOptions } from "../utils/getVoiceChannelOptions";
 import { youtube_v3 } from "googleapis";
 import { getGuild } from "../utils/getGuild";
 import { playerManager } from "../player";
+import { createJoinVoiceChannel } from "../utils/createJoinVoiceChannel";
 
 const data = new SlashCommandBuilder()
     .setName("play")
@@ -33,7 +33,7 @@ const execute = async (interaction: CommandInteraction) => {
         return;
     }
 
-    const connection = getVoiceConnection(getGuild(interaction)?.id!)|| joinVoiceChannel(getVoiceChannelOptions(interaction));
+    const connection = getVoiceConnection(getGuild(interaction)?.id!) || createJoinVoiceChannel(interaction)();
     const player = playerManager.getPlayer(interaction.guildId!);
     
     player.addResource({

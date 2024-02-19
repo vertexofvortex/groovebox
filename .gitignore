@@ -10,6 +10,7 @@ node_modules
 # Deal with environment files
 .env
 .env.*
+client_secret.json
 
 # We'll allow an example .env file which can be copied
 !.env.example

@@ -16,7 +16,7 @@ export const search = async (query: string) => {
     });
 };
 
-export const getAudioStream = (videoId: string) => {
+const getAudioStream = (videoId: string) => {
     const videoStream = ytdl(`http://www.youtube.com/watch?v=${videoId}`, { quality: "highestaudio" });
 
     return Ffmpeg({ source: videoStream });

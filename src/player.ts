@@ -85,7 +85,17 @@ class AudioPlayer {
 }
 
 class AudioPlayerManager {
+    constructor() {}
 
+    players = new Map<string, AudioPlayer>;
+
+    getPlayer = (guildId: string): AudioPlayer => {
+        if (!this.players.has(guildId)) {
+            this.players.set(guildId, new AudioPlayer());
+        }
+
+        return this.players.get(guildId)!;
+    };
 }
 
-export const audioPlayerInstance = new AudioPlayer();
+export const playerManager = new AudioPlayerManager();

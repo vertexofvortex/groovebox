@@ -3,8 +3,8 @@ import { search } from "../youtube-data-api/youtube";
 import { VoiceConnectionStatus, getVoiceConnection, joinVoiceChannel } from "@discordjs/voice";
 import { getVoiceChannelOptions } from "../utils/getVoiceChannelOptions";
 import { youtube_v3 } from "googleapis";
-import { audioPlayerInstance } from "../player";
 import { getGuild } from "../utils/getGuild";
+import { playerManager } from "../player";
 
 const data = new SlashCommandBuilder()
     .setName("play")
@@ -34,8 +34,9 @@ const execute = async (interaction: CommandInteraction) => {
     }
 
     const connection = getVoiceConnection(getGuild(interaction)?.id!)|| joinVoiceChannel(getVoiceChannelOptions(interaction));
-
-    audioPlayerInstance.addResource({
+    const player = playerManager.getPlayer(interaction.guildId!);
+    
+    player.addResource({
         title: video.snippet?.title!,
         source: `http://www.youtube.com/watch?v=${video.id?.videoId}`,
         addedBy: interaction.user,
@@ -46,12 +47,12 @@ const execute = async (interaction: CommandInteraction) => {
 `Added ${video.snippet?.title} to the queue
 
 Current queue:
-> [NOW PLAYING] ${audioPlayerInstance.currentPlaying?.title} - by ${audioPlayerInstance.currentPlaying?.addedBy.tag}
-${audioPlayerInstance.getQueue().map((resource, index) => `> [${index}] ${resource.title} - by ${resource.addedBy.tag}`).join("\n")}`
+> [NOW PLAYING] ${player.currentPlaying?.title} - by ${player.currentPlaying?.addedBy.tag}
+${player.getQueue().map((resource, index) => `> [${index}] ${resource.title} - by ${resource.addedBy.tag}`).join("\n")}`
 );
 
     connection.on(VoiceConnectionStatus.Ready, async () => {
-        const subscription = connection.subscribe(audioPlayerInstance.player);
+        const subscription = connection.subscribe(player.player);
 
         // TODO: connection destroying?
     });

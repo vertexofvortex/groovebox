@@ -1,33 +1,16 @@
-import { AudioPlayerStatus, NoSubscriberBehavior, createAudioPlayer, createAudioResource } from "@discordjs/voice";
+import { AudioPlayerStatus, AudioResource, NoSubscriberBehavior, createAudioPlayer, createAudioResource } from "@discordjs/voice";
 import { User } from "discord.js";
 import { Readable } from "stream";
 import logger from "./logger";
 import ytdl from "ytdl-core";
+import yandexMusicAPIWrapper from "./yandex/yandex";
+import youtubeAPIWrapper from "./youtube";
 
 type AudioResourceType = "youtube" | "yandex" | "spotify";
 
-function fetchAudioResource(resource: AudioResource): Readable {
-    if (resource.type === "youtube") {
-        /* TODO: get rid of ytdl because it sometimes randomly
-        throws "AudioPlayerError: aborted" exception: 
-        https://github.com/discordjs/voice/issues/202 */
-        return ytdl(resource.source, { quality: "highestaudio", dlChunkSize: 0 });
-    }
-
-    throw new Error("Cannot fetch this source");
-}
-
-function parseAudioResourceType(source: string): AudioResourceType {
-    if (source.includes("http://www.youtube.com/watch")) {
-        return "youtube";
-    }
-
-    throw new Error("Cannot parse audio resource type");
-}
-
-interface AudioResource {
+export interface GrooveboxAudioResource {
     title: string,
-    source: string,
+    source: string | number,
     addedBy: User,
     type: AudioResourceType,
 }
@@ -41,12 +24,12 @@ class AudioPlayer {
         behaviors: { noSubscriber: NoSubscriberBehavior.Pause }
     });
 
-    private queue: AudioResource[] = [];
-    currentPlaying: AudioResource | undefined;
+    private queue: GrooveboxAudioResource[] = [];
+    currentPlaying: GrooveboxAudioResource | undefined;
 
     // TODO: add to top
-    addResource = (resource: AudioResource) => {
-        logger.info("Resource added:", JSON.stringify(resource));
+    addResource = (resource: GrooveboxAudioResource) => {
+        logger.debug("Resource added:", JSON.stringify(resource));
 
         this.queue.push(resource);
 
@@ -54,7 +37,7 @@ class AudioPlayer {
     };
 
     removeResource = (index: number) => {
-        logger.info(`Resource with index ${index} removed from the queue`);
+        logger.debug(`Resource with index ${index} removed from the queue`);
 
         this.queue.splice(index, 1);
     };
@@ -63,18 +46,40 @@ class AudioPlayer {
         return this.queue;
     };
 
-    play = (index: number) => {
-        logger.info("Play method called");
+    play = async (index: number) => {
+        logger.debug("Play method called");
 
-        const audioResource = createAudioResource(fetchAudioResource(this.queue[index]));
+        let fetchedAudioResource: Readable | undefined;
 
-        this.player.play(audioResource);
+        if (this.queue[index].type === "youtube") {
+            fetchedAudioResource = await youtubeAPIWrapper.fetchAudioResource(this.queue[index]);
+        }
+
+        if (this.queue[index].type === "yandex") {
+            fetchedAudioResource = await yandexMusicAPIWrapper.fetchAudioResource(this.queue[index]);
+        }
+
+        if (!fetchedAudioResource) {
+            logger.warn(`Resource "${this.queue[index].title}" cannot be fetched somehow, skipping...`);
+
+            await this.play(index + 1);
+        }
+
+        this.player.play(createAudioResource(fetchedAudioResource!));
         this.currentPlaying = this.queue[index];
         this.removeResource(index);
     };
 
+    clear = () => {
+        logger.debug("Player cleared");
+
+        this.player.stop();
+        this.queue = [];
+        this.currentPlaying = undefined;
+    };
+
     handleIdle = () => {
-        logger.info("player status changed to idle");
+        logger.debug("player status changed to idle");
 
         if (this.queue.length != 0) {
             this.play(0);

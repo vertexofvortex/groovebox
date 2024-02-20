@@ -7,7 +7,8 @@ import { generateDependencyReport, getVoiceConnection } from "@discordjs/voice";
 export const client = new Client({
     intents: [
         GatewayIntentBits.Guilds,
-        GatewayIntentBits.GuildVoiceStates
+        GatewayIntentBits.GuildVoiceStates,
+        GatewayIntentBits.GuildMessages
     ]
 });
 
@@ -30,7 +31,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
     try {
         await command.execute(interaction);
     } catch (error) {
-        logger.trace(error);
+        logger.error(error);
         
         const errorMessage = {
             content: `There was an error occured while executing ${interaction.commandName} command!`,

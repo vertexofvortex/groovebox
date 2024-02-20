@@ -1,9 +1,8 @@
 import { CommandInteraction, SlashCommandBuilder } from "discord.js";
-import { search } from "../youtube-data-api/youtube";
-import { VoiceConnectionStatus, getVoiceConnection, joinVoiceChannel } from "@discordjs/voice";
-import { youtube_v3 } from "googleapis";
+import { VoiceConnectionStatus, getVoiceConnection } from "@discordjs/voice";
 import { playerManager } from "../player";
 import { createJoinVoiceChannel } from "../utils/createJoinVoiceChannel";
+import youtubeAPIWrapper from "../youtube";
 
 const data = new SlashCommandBuilder()
     .setName("play")
@@ -13,21 +12,10 @@ const data = new SlashCommandBuilder()
             .setDescription("Track name"));
 
 const execute = async (interaction: CommandInteraction) => {
-    let response;
-    let video: youtube_v3.Schema$SearchResult;
+    const video = await youtubeAPIWrapper.findFirst(interaction.options.get("name")?.value?.toString()!);
 
-    try {
-        response = await search(interaction.options.get("name")?.value as string);
-
-        if (response.data.items?.length === 0) {
-            await interaction.reply("No results");
-
-            return;
-        }
-
-        video = response.data.items![0];
-    } catch (error) {
-        await interaction.reply("An error occured");
+    if (!video) {
+        await interaction.reply("Cannot find the track =(");
 
         return;
     }

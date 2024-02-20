@@ -1,5 +1,5 @@
 import { CommandInteraction, SlashCommandBuilder } from "discord.js";
-import { search } from "../youtube-data-api/youtube";
+import youtubeAPIWrapper from "../youtube";
 
 const data = new SlashCommandBuilder()
     .setName("ytsearch")
@@ -9,19 +9,15 @@ const data = new SlashCommandBuilder()
             .setDescription("A search query"));
 
 const execute = async (interaction: CommandInteraction) => {    
-    try {
-        const response = await search(interaction.options.get("query")?.value as string);
+    const videos = await youtubeAPIWrapper.find(interaction.options.get("query")?.value?.toString()!);
 
-        if (response.data.items?.length === 0) {
-            await interaction.reply("No results");
-        }
+    if (!videos) {
+        await interaction.reply("Cannot find anything =(");
 
-        const video = response.data.items![0];
-
-        await interaction.reply(`Found: ${video.snippet?.title}`);
-    } catch (error) {
-        await interaction.reply("An error occured");
+        return;
     }
+
+    await interaction.reply(`Found something. Take a look at this results:\n\n${videos.map((video, index) => `[${index+1}] ${video.snippet?.title}`).join("\n")}`);
 };
 
 export const ytsearch = {

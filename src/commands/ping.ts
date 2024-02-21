@@ -5,7 +5,12 @@ const data = new SlashCommandBuilder()
     .setDescription("pong");
 
 const execute = async (interaction: CommandInteraction) => {
-    await interaction.reply("pong");
+    const sent = await interaction.reply({
+        content: "Pinging...",
+        fetchReply: true,
+    });
+
+    await interaction.editReply(`Roundtrip latency: \`${sent.createdTimestamp - interaction.createdTimestamp}ms\``);
 };
 
 export const ping = {

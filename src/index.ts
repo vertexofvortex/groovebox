@@ -1,10 +1,15 @@
+import "module-alias/register";
+import logger from "@utils/logger";
 import { Client, Events, GatewayIntentBits } from "discord.js";
-import logger from "./logger";
 import "dotenv/config";
-import commands from "./commands";
+import commands from "@commands/index";
 
-const client = new Client({
-    intents: [GatewayIntentBits.Guilds]
+export const client = new Client({
+    intents: [
+        GatewayIntentBits.Guilds,
+        GatewayIntentBits.GuildVoiceStates,
+        GatewayIntentBits.GuildMessages,
+    ],
 });
 
 client.once(Events.ClientReady, (client) => {
@@ -20,17 +25,17 @@ client.on(Events.InteractionCreate, async (interaction) => {
     const command = commands[interaction.commandName];
 
     if (!command) {
-        logger.warn(`A user ${interaction.user.tag} tried to execute an unexisting command ${interaction.commandName}`)
+        logger.warn(`A user ${interaction.user.tag} tried to execute an unexisting command ${interaction.commandName}`);
     }
 
     try {
         await command.execute(interaction);
     } catch (error) {
-        logger.trace(error);
+        logger.error(error);
         
         const errorMessage = {
             content: `There was an error occured while executing ${interaction.commandName} command!`,
-            ephemeral: true
+            ephemeral: true,
         };
 
         if (interaction.replied || interaction.deferred) {
@@ -40,3 +45,9 @@ client.on(Events.InteractionCreate, async (interaction) => {
         }
     }
 });
+
+// logger.info(generateDependencyReport());
+
+// process.on("exit", () => {
+//     logger.info("Shutting down Groovebox... Bye!");
+// });

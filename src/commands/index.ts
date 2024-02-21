@@ -1,8 +1,16 @@
-import { CommandInteraction, SlashCommandBuilder } from "discord.js";
-import { ping } from "./ping";
+import { CommandInteraction } from "discord.js";
+import { ping } from "@commands/ping";
+import { play } from "@commands/play";
+import { skip } from "@commands/skip";
+import { queue } from "@commands/queue";
+import { config } from "@commands/config";
+import { pause } from "@commands/pause";
+import { resume } from "@commands/resume";
 
 interface Command {
-    data: SlashCommandBuilder;
+    // FIXME:
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    data: any;
     execute: (interaction: CommandInteraction) => Promise<void>;
 }
 
@@ -12,6 +20,12 @@ interface CommandList {
 
 const commands: CommandList = {
     "ping": ping,
+    "play": play,
+    "skip": skip,
+    "queue": queue,
+    "pause": pause,
+    "resume": resume,
+    "config": config,
 };
 
 export default commands;

@@ -1,3 +1,4 @@
+import "module-alias/register";
 import { REST, Routes } from "discord.js";
 import "dotenv/config";
 import commands from "@commands/index";
@@ -14,7 +15,7 @@ for (const [name, command] of Object.entries(commands)) {
     }
 
     try {
-        logger.info(`Serializing "${command.data.name}" command...`);
+        logger.info(`Processing "${command.data.name}" command...`);
 
         commandsToDeploy.push(command.data.toJSON());
     } catch (error) {
@@ -23,9 +24,9 @@ for (const [name, command] of Object.entries(commands)) {
 }
 
 (async () => {
-    logger.info(`Deploying ${commandsToDeploy.length} application commands`);
+    logger.info(`Deploying ${commandsToDeploy.length} application commands...`);
 
     rest.put(Routes.applicationCommands(process.env.DISCORD_CLIENT_ID!), { body: commandsToDeploy })
-        .then(() => logger.info("Command deployed/reloaded successfully!"))
+        .then(() => logger.info("Commands deployed/reloaded successfully!"))
         .catch((error) => logger.error(error));
 })();

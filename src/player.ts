@@ -63,6 +63,14 @@ class AudioPlayer {
         this.removeResource(index);
     };
 
+    skip = () => {
+        if (this.queue.length > 0) {
+            this.play(0);
+        } else {
+            this.clear();
+        }
+    };
+
     clear = () => {
         logger.debug("Player cleared");
 

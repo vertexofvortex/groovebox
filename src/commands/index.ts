@@ -2,6 +2,7 @@ import { CommandInteraction } from "discord.js";
 import { ping } from "@commands/ping";
 import { play } from "@commands/play";
 import { skip } from "@commands/skip";
+import { queue } from "@commands/queue";
 
 interface Command {
     // FIXME:
@@ -18,6 +19,7 @@ const commands: CommandList = {
     "ping": ping,
     "play": play,
     "skip": skip,
+    "queue": queue,
 };
 
 export default commands;

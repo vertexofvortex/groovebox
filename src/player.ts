@@ -1,15 +1,16 @@
-import { AudioPlayerStatus, AudioResource, NoSubscriberBehavior, createAudioPlayer, createAudioResource } from "@discordjs/voice";
+import { AudioPlayerStatus, NoSubscriberBehavior, createAudioPlayer, createAudioResource } from "@discordjs/voice";
 import { User } from "discord.js";
-import { Readable } from "stream";
-import logger from "./logger";
-import ytdl from "ytdl-core";
-import yandexMusicAPIWrapper from "./yandex/yandex";
-import youtubeAPIWrapper from "./youtube";
+import { getService } from "./services";
+import logger from "@utils/logger";
 
-type AudioResourceType = "youtube" | "yandex" | "spotify";
+export interface AudioResourceType {
+    name: "youtube" | "yandex",
+    displayName: "YouTube" | "Yandex",
+}
 
 export interface GrooveboxAudioResource {
     title: string,
+    coverUrl?: string,
     source: string | number,
     addedBy: User,
     type: AudioResourceType,
@@ -21,7 +22,7 @@ class AudioPlayer {
     }
 
     player = createAudioPlayer({
-        behaviors: { noSubscriber: NoSubscriberBehavior.Pause }
+        behaviors: { noSubscriber: NoSubscriberBehavior.Pause },
     });
 
     private queue: GrooveboxAudioResource[] = [];
@@ -49,15 +50,7 @@ class AudioPlayer {
     play = async (index: number) => {
         logger.debug("Play method called");
 
-        let fetchedAudioResource: Readable | undefined;
-
-        if (this.queue[index].type === "youtube") {
-            fetchedAudioResource = await youtubeAPIWrapper.fetchAudioResource(this.queue[index]);
-        }
-
-        if (this.queue[index].type === "yandex") {
-            fetchedAudioResource = await yandexMusicAPIWrapper.fetchAudioResource(this.queue[index]);
-        }
+        const fetchedAudioResource = await getService(this.queue[index].type.name)?.fetchAudioResource(this.queue[index]);
 
         if (!fetchedAudioResource) {
             logger.warn(`Resource "${this.queue[index].title}" cannot be fetched somehow, skipping...`);

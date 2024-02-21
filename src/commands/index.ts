@@ -1,11 +1,10 @@
-import { CommandInteraction, SlashCommandBuilder } from "discord.js";
-import { ping } from "./ping";
-import { playsample } from "./playsample";
-import { ytsearch } from "./youtube-search";
-import { play } from "./play";
+import { CommandInteraction } from "discord.js";
+import { ping } from "@commands/ping";
+import { play } from "@commands/play";
 
 interface Command {
     // FIXME:
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
     data: any;
     execute: (interaction: CommandInteraction) => Promise<void>;
 }
@@ -16,9 +15,7 @@ interface CommandList {
 
 const commands: CommandList = {
     "ping": ping,
-    "playsample": playsample,
-    "ytsearch": ytsearch,
-    "play": play
+    "play": play,
 };
 
 export default commands;

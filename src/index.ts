@@ -1,15 +1,15 @@
+import "module-alias/register";
+import logger from "@utils/logger";
 import { Client, Events, GatewayIntentBits } from "discord.js";
-import logger from "./logger";
 import "dotenv/config";
-import commands from "./commands";
-import { generateDependencyReport, getVoiceConnection } from "@discordjs/voice";
+import commands from "@commands/index";
 
 export const client = new Client({
     intents: [
         GatewayIntentBits.Guilds,
         GatewayIntentBits.GuildVoiceStates,
-        GatewayIntentBits.GuildMessages
-    ]
+        GatewayIntentBits.GuildMessages,
+    ],
 });
 
 client.once(Events.ClientReady, (client) => {
@@ -25,7 +25,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
     const command = commands[interaction.commandName];
 
     if (!command) {
-        logger.warn(`A user ${interaction.user.tag} tried to execute an unexisting command ${interaction.commandName}`)
+        logger.warn(`A user ${interaction.user.tag} tried to execute an unexisting command ${interaction.commandName}`);
     }
 
     try {
@@ -35,7 +35,7 @@ client.on(Events.InteractionCreate, async (interaction) => {
         
         const errorMessage = {
             content: `There was an error occured while executing ${interaction.commandName} command!`,
-            ephemeral: true
+            ephemeral: true,
         };
 
         if (interaction.replied || interaction.deferred) {

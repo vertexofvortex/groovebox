@@ -10,5 +10,5 @@ const execute = async (interaction: CommandInteraction) => {
 
 export const ping = {
     data: data,
-    execute: execute
+    execute: execute,
 };

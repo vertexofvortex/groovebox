@@ -10,7 +10,7 @@ const execute = async (interaction: CommandInteraction) => {
     const queue = player.getQueue();
 
     await interaction.reply(
-        `Current queue:\n${queue.map((t, i) => `[${i+1}] ${t.title} (by ${t.addedBy.tag})`)}`
+        `Current queue:\n${queue.map((t, i) => `[${i+1}] ${t.title} (by ${t.addedBy.tag})`).join("\n")}`
     );
 };
 

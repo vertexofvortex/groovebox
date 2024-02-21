@@ -71,6 +71,26 @@ class AudioPlayer {
         }
     };
 
+    pause = () => {
+        if (this.player.state.status == AudioPlayerStatus.Paused) {
+            return false;
+        }
+
+        this.player.pause();
+
+        return true;
+    };
+
+    resume = () => {
+        if (this.player.state.status != AudioPlayerStatus.Paused) {
+            return false;
+        }
+
+        this.player.unpause();
+
+        return true;
+    };
+
     clear = () => {
         logger.debug("Player cleared");
 

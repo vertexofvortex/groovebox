@@ -4,6 +4,8 @@ import { play } from "@commands/play";
 import { skip } from "@commands/skip";
 import { queue } from "@commands/queue";
 import { config } from "@commands/config";
+import { pause } from "@commands/pause";
+import { resume } from "@commands/resume";
 
 interface Command {
     // FIXME:
@@ -21,6 +23,8 @@ const commands: CommandList = {
     "play": play,
     "skip": skip,
     "queue": queue,
+    "pause": pause,
+    "resume": resume,
     "config": config,
 };
 

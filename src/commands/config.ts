@@ -4,11 +4,11 @@ const data = new SlashCommandBuilder()
     .setName("config")
     .setDescription("With this command, you can configure Groovebox's behaviour in various scenarios")
         .addSubcommand(subcommand => subcommand
-            .setName("unqueue-current-track")
-            .setDescription("Should Groovebox remove the track from queue when playing it?")
+            .setName("save-queue")
+            .setDescription("Should played tracks remain in the queue?")
             .addBooleanOption(option => option
                 .setName("state")
-                .setDescription("true/false")    
+                .setDescription("true/false")
             )
         );
 

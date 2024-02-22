@@ -1,7 +1,16 @@
 import logger from "@utils/logger";
 import { createClient } from "redis";
 
-class Store {
+export interface StoreData {
+    config: Configuration,
+}
+
+export interface Configuration {
+    "save-queue": boolean,
+    "bind-to-channel": string,
+}
+
+export class Store {
     constructor(redisClient: ReturnType<typeof createClient>, guildId: string) {
         this.redis = redisClient;
         this.guildId = guildId;
@@ -10,22 +19,33 @@ class Store {
     redis;
     guildId;
 
-    set = async (key: string, value: object) => {
+    set = async <StoreEntry>(key: keyof StoreData, value: StoreEntry) => {
         logger.debug(`SET ${this.guildId}_${key}`, value);
-        return await this.redis.set(`${this.guildId}_${key}`, JSON.stringify(value));
+        
+        await this.redis.set(`${this.guildId}_${key}`, JSON.stringify(value));
     };
 
-    get = async (key: string) => {
+    update = async <StoreEntry>(key: keyof StoreData, value: Partial<StoreEntry>) => {
+        const oldValue = await this.get<StoreEntry>(key);
+
+        await this.set(key, {
+            ...oldValue,
+            ...value,
+        });
+    };
+
+    get = async <StoreEntry>(key: keyof StoreData): Promise<StoreEntry | null> => {
         const value = await this.redis.get(`${this.guildId}_${key}`);
 
         if (!value) return null;
 
         logger.debug(`GET ${this.guildId}_${key}`, value);
+        
         return JSON.parse(value);
     };
 }
 
-class StoreManager {
+export class StoreManager {
     constructor() {
         this.redis = createClient();
         // TODO: do something with this

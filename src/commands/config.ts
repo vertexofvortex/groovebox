@@ -1,5 +1,5 @@
 import { ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
-import { storeManager } from "../store";
+import { Configuration, storeManager } from "../store";
 
 const data = new SlashCommandBuilder()
     .setName("config")
@@ -26,36 +26,39 @@ const data = new SlashCommandBuilder()
         );
 
 const execute = async (interaction: ChatInputCommandInteraction) => {
-    // TODO: class for a configuration
-    // await interaction.reply(JSON.stringify(data));
     const store = storeManager.getStore(interaction.guildId!);
+    const subcommand = interaction.options.getSubcommand();
 
-    if (interaction.options.getSubcommand() == "save-queue") {
-        const config = await store.get("config");
+    if (subcommand == "save-queue") handleSaveQueue(interaction);
+    if (subcommand == "bind-to-channel") bindToChannel(interaction);
+    if (subcommand == "get-config") getConfig(interaction);
 
-        await store.set("config", {
-            ...config,
-            "save-queue": interaction.options.get("enabled")?.value,
+    async function handleSaveQueue(interaction: ChatInputCommandInteraction) {
+        await store.update<Configuration>("config", {
+            "save-queue": (String(interaction.options.get("enabled")?.value).toLowerCase() === "true"),
         });
 
-        await interaction.reply(`Queue saving mode is set to ${interaction.options.get("enabled")?.value}`);
+        await interaction.reply("Option changed");
     }
-
-    if (interaction.options.getSubcommand() == "bind-to-channel") {
-        const config = await store.get("config");
-
-        await store.set("config", {
-            ...config,
-            "bind-to-channel": interaction.options.get("channel")?.value,
+    
+    async function bindToChannel(interaction: ChatInputCommandInteraction) {
+        await store.update<Configuration>("config", {
+            "bind-to-channel": String(interaction.options.get("channel")?.value),
         });
 
-        const channel = await interaction.guild?.channels.fetch(interaction.options.get("channel")?.value?.toString() || "");
-
-        await interaction.reply(`Groovebox is now bind to #${channel?.name}`);
+        await interaction.reply("Option changed");
     }
 
-    if (interaction.options.getSubcommand() == "get-config") {
-        await interaction.reply(JSON.stringify(await store.get("config")));
+    async function getConfig(interaction: ChatInputCommandInteraction) {
+        const config = await store.get<Configuration>("config");
+
+        if (!config) {
+            await interaction.reply("You haven't configured any option yet");
+
+            return;
+        }
+
+        await interaction.reply(`Current configuration:\n\`\`\`${Object.entries(config).map((v) => `${v[0].padEnd(20, " ")} ${v[1]}`).join("\n")}\`\`\``);
     }
 };
 

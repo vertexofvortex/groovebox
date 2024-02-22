@@ -1,4 +1,4 @@
-import { CommandInteraction } from "discord.js";
+import { ChatInputCommandInteraction } from "discord.js";
 import { ping } from "@commands/ping";
 import { play } from "@commands/play";
 import { skip } from "@commands/skip";
@@ -11,7 +11,7 @@ interface Command {
     // FIXME:
     // eslint-disable-next-line @typescript-eslint/no-explicit-any
     data: any;
-    execute: (interaction: CommandInteraction) => Promise<void>;
+    execute: (interaction: ChatInputCommandInteraction) => Promise<void>;
 }
 
 interface CommandList {

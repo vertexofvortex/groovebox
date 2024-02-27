@@ -15,26 +15,29 @@ const data = new SlashCommandBuilder()
 const execute = async (interaction: CommandInteraction) => {
     const query = interaction.options.get("name")?.value?.toString();
     const searchResults = await searchTracks(query!, interaction);
-
+    
     if (!searchResults || searchResults.length == 0) {
         await interaction.reply("Cannot find anything =(");
-
+        
+        setTimeout((interaction) => interaction.deleteReply(), 5000, interaction);
+        
         return;
     }
+    
+    await interaction.deferReply({ fetchReply: true });
 
-    await interaction.deferReply({
-        fetchReply: true,
-    });
+    const player = playerManager.getPlayer(interaction.guildId!);
 
     const playButton = new ButtonBuilder()
         .setCustomId("play")
-        // TODO: or "add selected to the queue" if currentPlaying isn't undefined
-        .setLabel("Play selected")
+        .setLabel(player.currentPlaying ? "Add selected to the queue" : "Play selected")
         .setStyle(ButtonStyle.Primary);
+
     const cancelButton = new ButtonBuilder()
         .setCustomId("cancel")
         .setLabel("Cancel")
         .setStyle(ButtonStyle.Secondary);
+
     const select = new StringSelectMenuBuilder()
         .setCustomId("select")
         .setPlaceholder("1")
@@ -43,12 +46,14 @@ const execute = async (interaction: CommandInteraction) => {
         .addOptions(searchResults.map((result, index) => 
             new StringSelectMenuOptionBuilder().setLabel(`[${index+1}] ${result.title}`).setValue(index.toString()).setDefault(index == 0 ? true : false).setDescription(`From ${result.type.displayName}`)
         ));
+
     const row1 = new ActionRowBuilder<StringSelectMenuBuilder>()
         .addComponents(select);
+
     const row2 = new ActionRowBuilder<ButtonBuilder>()
         .addComponents(playButton, cancelButton);
 
-    const tracklistText = `\`\`\`\n${searchResults.map((r, i) => `#${i < 9 ? i+1+" " : i+1}\t[${r.type.displayName}]${r.type.displayName == "Yandex" ? " " : ""}\t${r.title}`).join("\n")}\`\`\``;
+    const tracklistText = `\`\`\`\n${searchResults.map((r, i) => `#${String(i).padEnd(3, " ")}\t${r.type.displayName.padEnd(10, " ")}\t${r.title}`).join("\n")}\`\`\``;
     const response = await interaction.editReply({
         content: `Results:\n${tracklistText}`,
         components: [ row1, row2 ],
@@ -73,7 +78,6 @@ const execute = async (interaction: CommandInteraction) => {
         if (i.customId === "play") {
             const audioResources = searchResults.filter((result, index) => selectedTrackIndexes.includes((index).toString()));
             const connection = getVoiceConnection(interaction.guildId!) || createJoinVoiceChannel(interaction)();
-            const player = playerManager.getPlayer(interaction.guildId!);
             let subscription: PlayerSubscription | undefined;
 
             audioResources.map(resource => player.addResource(resource));
@@ -98,6 +102,8 @@ const execute = async (interaction: CommandInteraction) => {
                 content: `Current queue:\n${player.getQueue().map(t => t.title).join("\n")}`,
                 components: [],
             });
+
+            setTimeout((interaction) => interaction.deleteReply(), 10000, interaction);
         }
 
         if (i.customId === "cancel") {

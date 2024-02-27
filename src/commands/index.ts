@@ -1,4 +1,4 @@
-import { ChatInputCommandInteraction } from "discord.js";
+import { ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
 import { ping } from "@commands/ping";
 import { play } from "@commands/play";
 import { skip } from "@commands/skip";
@@ -8,9 +8,7 @@ import { pause } from "@commands/pause";
 import { resume } from "@commands/resume";
 
 interface Command {
-    // FIXME:
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    data: any;
+    data: Partial<SlashCommandBuilder>;
     execute: (interaction: ChatInputCommandInteraction) => Promise<void>;
 }
 

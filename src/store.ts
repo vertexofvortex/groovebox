@@ -3,6 +3,7 @@ import { createClient } from "redis";
 
 export interface StoreData {
     config: Configuration,
+    pinnedMessageId: string,
 }
 
 export interface Configuration {

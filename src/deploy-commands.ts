@@ -17,7 +17,7 @@ for (const [name, command] of Object.entries(commands)) {
     try {
         logger.info(`Processing "${command.data.name}" command...`);
 
-        commandsToDeploy.push(command.data.toJSON());
+        commandsToDeploy.push(command.data.toJSON!());
     } catch (error) {
         logger.error(`An error occured during serialization of "${command.data.name}" command:`, error);
     }

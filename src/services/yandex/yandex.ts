@@ -22,7 +22,7 @@ class YandexMusicAPIWrapper implements BaseMusicService {
 
     find = async (query: string, interaction: CommandInteraction) => {
         try {
-            const response =await this.axios.get<YandexAPIResponse<SearchResult<Track>>>(
+            const response = await this.axios.get<YandexAPIResponse<SearchResult<Track>>>(
                 `https://api.music.yandex.net:443/search?text=${query}&page=0&type=track&nococrrect=false`
             );
 

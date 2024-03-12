@@ -26,9 +26,8 @@ class YandexMusicService implements BaseMusicService {
                 `https://api.music.yandex.net:443/search?text=${query}&page=0&type=track&nococrrect=false`
             );
 
-            if (!response.data.result.tracks.results) {
-                return undefined;
-            }
+            if (!response.data.result.tracks) return undefined;
+            if (response.data.result.tracks.results.length == 0) return undefined;
 
             const results = response.data.result.tracks.results;
             const audioResources: GrooveboxAudioResource[] = results.map(result => ({

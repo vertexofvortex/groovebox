@@ -4,9 +4,9 @@
   "description": "",
   "main": "src/index.js",
   "scripts": {
-    "compile": "npx tsc",
-    "start": "node dist/index.js",
-    "develop": "nodemon src/index.ts",
+    "compile": "npx swc src --out-dir dist",
+    "start": "node dist/src/index.js",
+    "develop": "nodemon --watch src --ext ts --exec 'npm run compile && npm start'",
     "deploy_commands": "node dist/deploy-commands.js",
     "lint": "eslint src/*"
   },
@@ -14,9 +14,9 @@
   "author": "",
   "license": "ISC",
   "_moduleAliases": {
-    "@commands": "dist/commands",
-    "@services": "dist/services",
-    "@utils": "dist/utils"
+    "@commands": "dist/src/commands",
+    "@services": "dist/src/services",
+    "@utils": "dist/src/utils"
   },
   "dependencies": {
     "@discordjs/opus": "^0.9.0",
@@ -39,12 +39,13 @@
     "ytdl-core": "^4.11.5"
   },
   "devDependencies": {
+    "@swc/cli": "^0.3.10",
+    "@swc/core": "^1.4.6",
     "@types/node": "^20.11.19",
     "@typescript-eslint/eslint-plugin": "^7.0.2",
     "@typescript-eslint/parser": "^7.0.2",
     "eslint": "^8.56.0",
     "nodemon": "^3.0.3",
-    "ts-node": "^10.9.2",
     "typescript": "^5.3.3"
   }
 }

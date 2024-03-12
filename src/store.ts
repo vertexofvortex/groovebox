@@ -9,6 +9,9 @@ export interface StoreData {
 export interface Configuration {
     "save-queue": boolean,
     "bind-to-channel": string,
+    "restrict-other-channels": boolean,
+    "command-output-visibility": boolean,
+    "command-output-ttl": number,
 }
 
 export class Store {

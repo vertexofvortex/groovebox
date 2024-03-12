@@ -1,5 +1,6 @@
 import { CommandInteraction, SlashCommandBuilder } from "discord.js";
 import { playerManager } from "../player";
+import reply from "@utils/reply";
 
 const data = new SlashCommandBuilder()
     .setName("skip")
@@ -10,7 +11,7 @@ const execute = async (interaction: CommandInteraction) => {
 
     player.skip();
 
-    await interaction.reply("Skipping...");
+    await reply(interaction, "Skipping...");
 };
 
 export const skip = {

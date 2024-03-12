@@ -1,10 +1,10 @@
 import { AudioResourceType } from "../player";
-import YandexMusicAPIWrapper from "./yandex/yandex";
-import YouTubeAPIWrapper from "./youtube/youtube";
+import YandexMusicService from "./yandex/yandex";
+import YouTubeService from "./youtube/youtube";
 
 const services = {
-    "youtube": new YouTubeAPIWrapper(),
-    "yandex": new YandexMusicAPIWrapper(),
+    "youtube": new YouTubeService(),
+    "yandex": new YandexMusicService(),
 };
 
 export const getService = (name: AudioResourceType["name"]) => {

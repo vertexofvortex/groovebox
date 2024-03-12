@@ -3,7 +3,7 @@ import { ping } from "@commands/ping";
 import { play } from "@commands/play";
 import { skip } from "@commands/skip";
 import { queue } from "@commands/queue";
-import { config } from "@commands/config";
+import { config } from "@commands/config/config";
 import { pause } from "@commands/pause";
 import { resume } from "@commands/resume";
 

@@ -1,5 +1,6 @@
 import { CommandInteraction, SlashCommandBuilder } from "discord.js";
 import { playerManager } from "../player";
+import reply from "@utils/reply";
 
 const data = new SlashCommandBuilder()
     .setName("resume")
@@ -9,9 +10,9 @@ const execute = async (interaction: CommandInteraction) => {
     const player = playerManager.getPlayer(interaction.guildId!);
 
     if (player.resume()) {
-        await interaction.reply("Playing again...");
+        await reply(interaction, "Playing again...");
     } else {
-        await interaction.reply("Already playing");
+        await reply(interaction, "Already playing");
     }
 };
 

@@ -1,3 +1,4 @@
+import reply from "@utils/reply";
 import { CommandInteraction, SlashCommandBuilder } from "discord.js";
 
 const data = new SlashCommandBuilder()
@@ -5,7 +6,7 @@ const data = new SlashCommandBuilder()
     .setDescription("pong");
 
 const execute = async (interaction: CommandInteraction) => {
-    const sent = await interaction.reply({
+    const sent = await reply(interaction, {
         content: "Pinging...",
         fetchReply: true,
     });

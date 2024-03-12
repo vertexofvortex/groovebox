@@ -4,6 +4,7 @@ import { playerManager } from "../player";
 import logger from "@utils/logger";
 import { createJoinVoiceChannel } from "@utils/createJoinVoiceChannel";
 import { searchTracks } from "@utils/searchTracks";
+import reply from "@utils/reply";
 
 const data = new SlashCommandBuilder()
     .setName("play")
@@ -17,9 +18,7 @@ const execute = async (interaction: CommandInteraction) => {
     const searchResults = await searchTracks(query!, interaction);
     
     if (!searchResults || searchResults.length == 0) {
-        await interaction.reply("Cannot find anything =(");
-        
-        setTimeout((interaction) => interaction.deleteReply(), 5000, interaction);
+        await reply(interaction, "Cannot find anything =(");
         
         return;
     }

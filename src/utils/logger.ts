@@ -3,8 +3,9 @@ import * as log4js from "log4js";
 log4js.configure({
     appenders: {
         file: {
-            type: "file",
-            filename: "debug.log",
+            type: "dateFile",
+            filename: `logs/${new Date().toISOString().split("T")[0]}/${new Date().toISOString()}.log`,
+            pattern: "yyyy-MM-dd",
         },
         console: {
             type: "console",
@@ -13,11 +14,10 @@ log4js.configure({
     categories: {
         default: {
             appenders: ["file", "console"],
-            level: "debug",
+            level: "TRACE",
         },
     },
 });
 const logger = log4js.getLogger();
-logger.level = "debug";
 
 export default logger;

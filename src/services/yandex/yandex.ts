@@ -9,7 +9,7 @@ import BaseMusicService from "../BaseMusicService";
 import { CommandInteraction } from "discord.js";
 import logger from "@utils/logger";
 
-class YandexMusicAPIWrapper implements BaseMusicService {
+class YandexMusicService implements BaseMusicService {
     constructor() {}
 
     private axios = axios.create({
@@ -120,4 +120,4 @@ class YandexMusicAPIWrapper implements BaseMusicService {
     };
 }
 
-export default YandexMusicAPIWrapper;
+export default YandexMusicService;

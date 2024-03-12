@@ -22,8 +22,6 @@ class YouTubeService implements BaseMusicService {
                 q: query,
             });
 
-            logger.debug(response.data.items);
-
             if (response.data.items?.length == 0 || !response.data.items) return undefined;
 
             const results = response.data.items;

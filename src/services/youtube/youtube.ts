@@ -7,7 +7,7 @@ import BaseMusicService from "../BaseMusicService";
 import { CommandInteraction } from "discord.js";
 import logger from "@utils/logger";
 
-class YouTubeAPIWrapper implements BaseMusicService {
+class YouTubeService implements BaseMusicService {
     // TODO: pass options to the class constructor
     youtube = google.youtube({
         version: "v3",
@@ -21,8 +21,6 @@ class YouTubeAPIWrapper implements BaseMusicService {
                 type: ["video"],
                 q: query,
             });
-
-            logger.debug(response.data.items);
 
             if (response.data.items?.length == 0 || !response.data.items) return undefined;
 
@@ -69,4 +67,4 @@ class YouTubeAPIWrapper implements BaseMusicService {
     };
 }
 
-export default YouTubeAPIWrapper;
+export default YouTubeService;

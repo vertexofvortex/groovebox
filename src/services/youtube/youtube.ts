@@ -6,12 +6,13 @@ import { GrooveboxAudioResource } from "../../player";
 import BaseMusicService from "../BaseMusicService";
 import { CommandInteraction } from "discord.js";
 import logger from "@/utils/logger";
+import config from "@/config";
 
 class YouTubeService implements BaseMusicService {
     // TODO: pass options to the class constructor
     youtube = google.youtube({
         version: "v3",
-        auth: process.env.YOUTUBE_TOKEN,
+        auth: config.YOUTUBE_TOKEN,
     });
 
     find = async (query: string, interaction: CommandInteraction) => {

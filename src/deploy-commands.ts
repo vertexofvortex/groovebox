@@ -1,10 +1,10 @@
 import "module-alias/register";
 import { REST, Routes } from "discord.js";
-import "dotenv/config";
 import commands from "@/commands/index";
 import logger from "@/utils/logger";
+import config from "@/config";
 
-const rest = new REST().setToken(process.env.DISCORD_TOKEN!);
+const rest = new REST().setToken(config.DISCORD_TOKEN);
 const commandsToDeploy = [];
 
 for (const [name, command] of Object.entries(commands)) {
@@ -26,7 +26,7 @@ for (const [name, command] of Object.entries(commands)) {
 (async () => {
     logger.info(`Deploying ${commandsToDeploy.length} application commands...`);
 
-    rest.put(Routes.applicationCommands(process.env.DISCORD_CLIENT_ID!), { body: commandsToDeploy })
+    rest.put(Routes.applicationCommands(config.DISCORD_CLIENT_ID), { body: commandsToDeploy })
         .then(() => logger.info("Commands deployed/reloaded successfully!"))
         .catch((error) => logger.error(error));
 })();

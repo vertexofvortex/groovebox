@@ -1,6 +1,6 @@
 import { CommandInteraction, SlashCommandBuilder } from "discord.js";
 import { playerManager } from "../player";
-import reply from "@utils/reply";
+import reply from "@/utils/reply";
 
 const data = new SlashCommandBuilder()
     .setName("resume")

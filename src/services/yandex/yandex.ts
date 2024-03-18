@@ -7,14 +7,15 @@ import { Readable } from "stream";
 import { GrooveboxAudioResource } from "../../player";
 import BaseMusicService from "../BaseMusicService";
 import { CommandInteraction } from "discord.js";
-import logger from "@utils/logger";
+import logger from "@/utils/logger";
+import config from "@/config";
 
 class YandexMusicService implements BaseMusicService {
     constructor() {}
 
     private axios = axios.create({
         headers: {
-            "Authorization": `OAuth ${process.env.YANDEX_TOKEN}`,
+            "Authorization": `OAuth ${config.YANDEX_TOKEN}`,
         },
     });
 

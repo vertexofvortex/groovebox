@@ -1,11 +1,11 @@
 import "module-alias/register";
-import logger from "@utils/logger";
+import logger from "@/utils/logger";
 import { Client, Events, GatewayIntentBits, TextChannel, channelMention } from "discord.js";
-import "dotenv/config";
-import commands from "@commands/index";
-import { Configuration, storeManager } from "./store";
-import formatPinnedMessageEmbed from "@utils/formatPinnedMessageEmbed";
-import { playerManager } from "./player";
+import commands from "@/commands/index";
+import { Configuration, storeManager } from "@/store";
+import formatPinnedMessageEmbed from "@/utils/formatPinnedMessageEmbed";
+import { playerManager } from "@/player";
+import config from "@/config";
 
 export const client = new Client({
     intents: [
@@ -19,7 +19,7 @@ client.once(Events.ClientReady, (client) => {
     logger.info(`Groovebox started. Logged in as ${client.user.tag}`);
 });
 
-client.login(process.env.DISCORD_TOKEN);
+client.login(config.DISCORD_TOKEN);
 
 client.on(Events.MessageCreate, async (interaction) => {
     const store = storeManager.getStore(interaction.guildId!);

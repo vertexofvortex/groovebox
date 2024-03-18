@@ -1,6 +1,6 @@
 import { CommandInteraction } from "discord.js";
 import { GrooveboxAudioResource } from "../player";
-import services from "@services/index";
+import services from "@/services/index";
 
 export const searchTracks = async (query: string, interaction: CommandInteraction) => {
     const searchResults: GrooveboxAudioResource[] = [];

@@ -1,10 +1,10 @@
 import { ActionRowBuilder, ButtonBuilder, ButtonStyle, CommandInteraction, SlashCommandBuilder, StringSelectMenuBuilder, StringSelectMenuOptionBuilder, UserSelectMenuInteraction } from "discord.js";
 import { PlayerSubscription, VoiceConnectionStatus, getVoiceConnection } from "@discordjs/voice";
 import { playerManager } from "../player";
-import logger from "@utils/logger";
-import { createJoinVoiceChannel } from "@utils/createJoinVoiceChannel";
-import { searchTracks } from "@utils/searchTracks";
-import reply from "@utils/reply";
+import logger from "@/utils/logger";
+import { createJoinVoiceChannel } from "@/utils/createJoinVoiceChannel";
+import { searchTracks } from "@/utils/searchTracks";
+import reply from "@/utils/reply";
 
 const data = new SlashCommandBuilder()
     .setName("play")

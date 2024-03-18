@@ -1,8 +1,8 @@
-import formatPinnedMessageEmbed from "@utils/formatPinnedMessageEmbed";
+import formatPinnedMessageEmbed from "@/utils/formatPinnedMessageEmbed";
 import { ChatInputCommandInteraction, TextChannel } from "discord.js";
 import { playerManager } from "../../../player";
 import { Configuration, Store } from "../../../store";
-import reply from "@utils/reply";
+import reply from "@/utils/reply";
 
 async function bindToChannel(interaction: ChatInputCommandInteraction, store: Store) {
     let channel = interaction.guild?.channels.cache.get(

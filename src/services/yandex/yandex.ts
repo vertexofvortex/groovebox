@@ -7,7 +7,7 @@ import { Readable } from "stream";
 import { GrooveboxAudioResource } from "../../player";
 import BaseMusicService from "../BaseMusicService";
 import { CommandInteraction } from "discord.js";
-import logger from "@utils/logger";
+import logger from "@/utils/logger";
 
 class YandexMusicService implements BaseMusicService {
     constructor() {}

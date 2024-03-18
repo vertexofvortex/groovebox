@@ -1,10 +1,10 @@
 import "module-alias/register";
-import logger from "@utils/logger";
+import logger from "@/utils/logger";
 import { Client, Events, GatewayIntentBits, TextChannel, channelMention } from "discord.js";
 import "dotenv/config";
-import commands from "@commands/index";
+import commands from "@/commands/index";
 import { Configuration, storeManager } from "./store";
-import formatPinnedMessageEmbed from "@utils/formatPinnedMessageEmbed";
+import formatPinnedMessageEmbed from "@/utils/formatPinnedMessageEmbed";
 import { playerManager } from "./player";
 
 export const client = new Client({

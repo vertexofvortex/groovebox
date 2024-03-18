@@ -1,7 +1,7 @@
 import { AudioPlayerStatus, NoSubscriberBehavior, createAudioPlayer, createAudioResource } from "@discordjs/voice";
 import { User } from "discord.js";
 import { getService } from "./services";
-import logger from "@utils/logger";
+import logger from "@/utils/logger";
 
 export interface AudioResourceType {
     name: "youtube" | "yandex",

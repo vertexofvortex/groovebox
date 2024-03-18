@@ -1,4 +1,4 @@
-import reply from "@utils/reply";
+import reply from "@/utils/reply";
 import { CommandInteraction, SlashCommandBuilder } from "discord.js";
 
 const data = new SlashCommandBuilder()

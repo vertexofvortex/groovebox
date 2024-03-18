@@ -15,9 +15,7 @@
   "author": "",
   "license": "GPL-3.0-only",
   "_moduleAliases": {
-    "@commands": "dist/commands",
-    "@services": "dist/services",
-    "@utils": "dist/utils"
+    "@": "dist"
   },
   "dependencies": {
     "@discordjs/opus": "^0.9.0",

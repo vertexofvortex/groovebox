@@ -1,11 +1,11 @@
 import { ChatInputCommandInteraction, SlashCommandBuilder } from "discord.js";
-import { ping } from "@commands/ping";
-import { play } from "@commands/play";
-import { skip } from "@commands/skip";
-import { queue } from "@commands/queue";
-import { config } from "@commands/config/config";
-import { pause } from "@commands/pause";
-import { resume } from "@commands/resume";
+import { ping } from "@/commands/ping";
+import { play } from "@/commands/play";
+import { skip } from "@/commands/skip";
+import { queue } from "@/commands/queue";
+import { config } from "@/commands/config/config";
+import { pause } from "@/commands/pause";
+import { resume } from "@/commands/resume";
 
 interface Command {
     data: Partial<SlashCommandBuilder>;

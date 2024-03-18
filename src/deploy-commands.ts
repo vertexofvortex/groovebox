@@ -1,8 +1,8 @@
 import "module-alias/register";
 import { REST, Routes } from "discord.js";
 import "dotenv/config";
-import commands from "@commands/index";
-import logger from "@utils/logger";
+import commands from "@/commands/index";
+import logger from "@/utils/logger";
 
 const rest = new REST().setToken(process.env.DISCORD_TOKEN!);
 const commandsToDeploy = [];

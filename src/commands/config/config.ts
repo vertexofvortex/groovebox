@@ -6,7 +6,7 @@ import unbindFromChannel from "./subcommands/unbindFromChannel";
 import restrictOtherChannels from "./subcommands/restrictOtherChannels";
 import commandOutputVisibility from "./subcommands/commandOutputVisibility";
 import commandOutputTTL from "./subcommands/commandOutputTTL";
-import { storeManager } from "#/store";
+import { storeManager } from "@/store";
 
 const data = new SlashCommandBuilder()
     .setName("config")

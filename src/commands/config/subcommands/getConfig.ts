@@ -1,6 +1,6 @@
 import { ChatInputCommandInteraction } from "discord.js";
 import { Configuration, Store } from "../../../store";
-import reply from "@utils/reply";
+import reply from "@/utils/reply";
 
 async function getConfig(interaction: ChatInputCommandInteraction, store: Store) {
     const config = await store.get<Configuration>("config");

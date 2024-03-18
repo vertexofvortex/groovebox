@@ -23,10 +23,9 @@ for (const [name, command] of Object.entries(commands)) {
     }
 }
 
-(async () => {
-    logger.info(`Deploying ${commandsToDeploy.length} application commands...`);
+logger.info(`Deploying ${commandsToDeploy.length} application commands...`);
 
-    rest.put(Routes.applicationCommands(config.DISCORD_CLIENT_ID), { body: commandsToDeploy })
-        .then(() => logger.info("Commands deployed/reloaded successfully!"))
-        .catch((error) => logger.error(error));
-})();
+rest.put(Routes.applicationCommands(config.DISCORD_CLIENT_ID), { body: commandsToDeploy })
+    .then(() => logger.info("Commands deployed/reloaded successfully!"))
+    .catch((error) => logger.error(error))
+    .finally(() => process.exit(0));
